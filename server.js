@@ -13,6 +13,8 @@ const connectDB = require('./config/db');
 const app = express();
 connectDB();
 
+app.use(express.json());
+
 // dev logging middleware
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
