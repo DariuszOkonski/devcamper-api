@@ -71,7 +71,7 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   // calc radius using radians
   // divide dist by radius of eartch
   // earth radius = 3.963 mi / 6.378 km
-  const radius = 1200 / 3963;
+  const radius = 12000 / 3963;
 
   const bootcamps = await Bootcamp.find({
     location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
