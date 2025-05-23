@@ -1,6 +1,6 @@
 const { faker } = require('@faker-js/faker');
 
-module.exports = fakeListOfBootcamps = (number = 1) => {
+exports.fakeListOfBootcamps = (number = 1) => {
   return Array.from({ length: number }, (_, i) => i + 1).map((item) => {
     const street = faker.location.street();
     const city = faker.location.city();
@@ -25,3 +25,7 @@ module.exports = fakeListOfBootcamps = (number = 1) => {
     return location;
   });
 };
+
+exports.fakeLongLattPositions = () => (Math.random() * 100).toFixed(6);
+
+// module.exports = { fakeListOfBootcamps, fakeListOfBootcamps };
