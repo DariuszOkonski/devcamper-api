@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// const geocoder = require('../utils/geocoder');
+const { faker } = require('@faker-js/faker');
 
 const BootcampSchema = new mongoose.Schema({
   name: {
@@ -99,10 +101,51 @@ const BootcampSchema = new mongoose.Schema({
 
 // create bootcamp slug from the name
 BootcampSchema.pre('save', function (next) {
-  console.log('Slugify ran: ', this.name);
   this.slug = slugify(this.name, { lower: true });
 
   next();
 });
+
+// TODO: this part wont work because service require real paycard data
+BootcampSchema.pre('save', async function (next) {
+  // const loc = await geocoder.geocode(this.address);
+  // this.location = {
+  //   type: 'Point',
+  //   coordinates: [loc[0].longitude, loc[0].latitude],
+  //   formattedAddress: loc[0].formattedAddress,
+  //   street: loc[0].streetName,
+  //   city: loc[0].city,
+  //   state: loc[0].stateCode,
+  //   zipCode: loc[0].zipcode,
+  //   country: loc[0].countryCode,
+  // };
+
+  const street = faker.location.street();
+  const city = faker.location.city();
+  const state = faker.location.countryCode();
+  const zipcode = faker.location.zipCode('#####-####');
+  const country = faker.location.countryCode();
+
+  this.location = {
+    type: 'Point',
+    coordinates: [
+      (Math.random() * 100).toFixed(6),
+      (Math.random() * 100).toFixed(6),
+    ],
+    formattedAddress: `${street}, ${city}, ${state} ${zipcode}, ${country}`,
+    street,
+    city,
+    state,
+    zipcode,
+    country,
+  };
+
+  // do not save address in db
+  this.address = undefined;
+
+  next();
+});
+
+// geocode & create location field
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);
